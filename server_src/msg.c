@@ -76,7 +76,6 @@ void	msg(t_client *client, char *cmd, int fd, t_conn *conn)
 					send_result(-1, fd);
 					return ;
 				}
-				ft_putendl("'here");
 				send_cmd(receiver->fd, make_cmd(name, cmd));
 				send_result(1, fd);
 				i = 1;

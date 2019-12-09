@@ -2,14 +2,7 @@
 
 void 	send_cmd(char *cmd, t_conn *conn)
 {
-	int	len;
-	char *size;
-	char *real_cmd;
-
-	len = ft_strlen(cmd);
-	size = ft_itoa(len);
-	real_cmd = ft_strjoin(size, cmd);
-	send(conn->fd, real_cmd, ft_strlen(real_cmd), 0);
+	send(conn->fd, cmd, ft_strlen(cmd), 0);
 }
 
 void	set_vars(t_user *user, char *str)

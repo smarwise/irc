@@ -68,11 +68,14 @@ int		check_in_channel(char **array, char *name)
 	int i;
 
 	i = 0;
-	while ( array[i])
+	if (array)
 	{
-		if (ft_strcmp(array[i], name) == 0)
-			return (1);
-		i++;
+		while (array[i])
+		{
+			if (ft_strcmp(array[i], name) == 0)
+				return (1);
+			i++;
+		}
 	}
 	return (0);
 }

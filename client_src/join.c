@@ -61,8 +61,10 @@ void	join(char *str, t_user *user, t_conn *conn,
 		{
 			if (array[1][0] != '#' || (ft_strlen(array[1]) == 1))
 				ft_err("Invalid channel name");
-			else if (ft_strlen(array[1]) > 17)
+			else if (ft_strlen(array[1]) > 16)
 				ft_err("Channel name cannot be greater than 16");
+			else if (check_in_channel(user->channels, array[1]))
+				ft_err("You are already in this channel");
 			else
 			{
 				send_cmd(str, conn);

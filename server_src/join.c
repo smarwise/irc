@@ -64,7 +64,6 @@ void	add_channel_to_client(t_client *cl, char *name)
 		while (cl->channels[i])
 			i++;
 	}
-	ft_putendl("here");
 	cl->channels[i] = (char *)malloc(sizeof(char) * ft_strlen(name));
 	cl->channels[i] = ft_strdup(name);
 	cl->channels[i + 1] = NULL;

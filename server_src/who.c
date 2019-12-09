@@ -50,7 +50,6 @@ void	who(t_conn *conn, int fd, char *cmd)
 		}
 		channel = channel->next;
 	}
-	ft_putendl(list);
 	send(fd, list, ft_strlen(list), 0);
 	free(list);
  }

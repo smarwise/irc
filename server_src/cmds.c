@@ -86,7 +86,6 @@ int   get_cmd(t_buffer *buffer, int fd, t_conn *conn, t_select *select)
 
 t_buffer    *get_buffer(int fd, t_buffer *buf)
 {
-    printf("%p\n", buf);
     while (buf)
     {
         if (buf->fd == fd)

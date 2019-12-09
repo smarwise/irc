@@ -35,7 +35,6 @@ void  create_client_buffer(int fd, t_select *select, t_conn *conn)
     else
     {
         buf = select->buffer;
-        printf("create :%p\n", buf);
         while (buf->next)
             buf = buf->next;
         buf->next = (t_buffer*)malloc(sizeof(t_buffer));
@@ -48,7 +47,6 @@ void  create_client_buffer(int fd, t_select *select, t_conn *conn)
     buf->save = 0;
     buf->incomplete = NULL;
     ft_memset(buf->buffer, '\0', 50);
-    printf("new: %p\n", buf);
     buf->next = NULL;
 }
 
