@@ -7,7 +7,7 @@ void    add_to_buffer(t_buffer *buff, char buffer[50])
     i = 0;
     while (buffer[i])
     {
-        if (buff->write == 49)
+        if (buff->write == 50)
             buff->write = 0;
         buff->buffer[buff->write] = buffer[i];
         buff->write++;
@@ -43,15 +43,25 @@ int    check_err(int fd, t_conn *conn, int nbytes, t_select *select)
 
 void        read_cmd(t_buffer *buffer, size_t *i)
 {
+    ft_putnbr(buffer->read);
+    ft_putstr(">>>>>>>>>>>");
+    ft_putnbr(buffer->write);
+    ft_putstr(">>>>>>>>>>>");
     while (buffer->read != buffer->write)
     {
-        buffer->cmd[*i] = buffer->buffer[buffer->read];
+        if (buffer->buffer[buffer->read] != '\0')
+            buffer->cmd[*i] = buffer->buffer[buffer->read];
+        ft_putchar(buffer->buffer[buffer->read]);
         *i += 1;
         if (buffer->read == 49 && *i <= buffer->cmdlen)
             buffer->read = 0;
         else if (*i <= buffer->cmdlen && buffer->read != 49)
             buffer->read++;
+        ft_putnbr(buffer->read);
+        ft_putchar(' ');
     }
+    ft_putchar('\n');
+    ft_putendl(buffer->cmd);
 }
 
 int   get_cmd(t_buffer *buffer, int fd, t_conn *conn, t_select *select)
@@ -63,6 +73,7 @@ int   get_cmd(t_buffer *buffer, int fd, t_conn *conn, t_select *select)
     i = 0;
     ft_putendl(buffer->buffer);
     buffer->cmd = ft_strnew(buffer->cmdlen);
+    ft_putnbr(buffer->cmdlen);
     while (1)
     {
         ft_memset(buf, '\0', 50);
