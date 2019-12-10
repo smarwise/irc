@@ -43,17 +43,10 @@ int    check_err(int fd, t_conn *conn, int nbytes, t_select *select)
 
 void        read_cmd(t_buffer *buffer, size_t *i)
 {
-
-    ft_putstr("write >>");
-    ft_putnbr(buffer->write);
-    ft_putchar('\n');
     if (buffer->write == 50)
         buffer->write = 0;
     while (buffer->read != buffer->write)
     {
-        ft_putstr("read >>");
-        ft_putnbr(buffer->read);
-        ft_putchar('\n');
         if (buffer->buffer[buffer->read] != '\0')
             buffer->cmd[*i] = buffer->buffer[buffer->read];
         *i += 1;
@@ -64,8 +57,6 @@ void        read_cmd(t_buffer *buffer, size_t *i)
         else
             break;
     }
-    ft_putchar('\n');
-    ft_putendl(buffer->cmd);
 }
 
 int   get_cmd(t_buffer *buffer, int fd, t_conn *conn, t_select *select)
@@ -93,7 +84,6 @@ int   get_cmd(t_buffer *buffer, int fd, t_conn *conn, t_select *select)
             break ;
     }
     buffer->cmd = ft_strtrim(buffer->cmd);
-    ft_putendl(buffer->buffer);
     return (0);
 }
 
@@ -108,25 +98,31 @@ t_buffer    *get_buffer(int fd, t_buffer *buf)
     return (NULL);
 }
 
-// void    check_cmd_exec(t_buffer *buff, int fd, t_client *client, t_conn *conn)
-// {
-//     char *temp;
+void    check_cmd_exec(t_buffer *buff, int fd, t_client *client, t_conn *conn)
+{
+    char *temp;
 
-//     if (buff->save == 1)
-//     {
-//         if (buff->incomplete == NULL)
-//         {
-//             buff->incomplete = ft_strdup(buff->cmd);
-//         }
-//         else
-//         {
-//             temp = buff->cmd;
-//             buff->incomplete = ft_strjoin(buff->incomplete, buff->cmd);
-//             exec_cmd(buff, conn, client, fd);
-//         }
-//     }
-//     buff->save = 0;
-// }
+    if (buff->save == 1)
+    {
+        if (buff->incomplete == NULL)
+        {
+            ft_putendl("here1");
+            buff->incomplete = ft_strdup(buff->cmd);
+        }
+        else
+        {
+            ft_putendl("here2");
+            temp = buff->cmd;
+            buff->incomplete = ft_strjoin(buff->incomplete, buff->cmd);
+            buff->cmd = ft_strdup(buff->incomplete);
+            exec_cmd(buff, conn, client, fd);
+            free(buff->incomplete);
+            buff->incomplete = NULL;
+        }
+        ft_putendl(buff->incomplete);
+    }
+    buff->save = 0;
+}
 
 void    handle_old_clients(t_select *select, int *i, t_conn *conn)
 {
@@ -140,5 +136,5 @@ void    handle_old_clients(t_select *select, int *i, t_conn *conn)
     if (get_cmd(buff, *i, conn, select) == -1)
         return;
     exec_cmd(buff, conn, client, *i);
-    // check_cmd_exec(buff, *i, client, conn);
+    check_cmd_exec(buff, *i, client, conn);
 }

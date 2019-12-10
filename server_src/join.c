@@ -69,13 +69,18 @@ void	add_channel_to_client(t_client *cl, char *name)
 	cl->channels[i + 1] = NULL;
 }
 
-void	join(t_conn *conn, char *str, int fd)
+void	join(t_conn *conn, char *str, int fd, t_buffer *buffer)
 {
 	char **array;
 	t_client *cl;
 	int set;
 
 	array = ft_strsplit(str, ' ');
+	if (arraylen(array) == 1)
+	{
+		buffer->save = 1;
+		return ;
+	}
 	cl = get_client(conn, fd);
 	set = 0;
 	if (conn->chan_head == NULL)

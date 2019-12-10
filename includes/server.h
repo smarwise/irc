@@ -70,7 +70,7 @@ void    handle_old_clients(t_select *select, int *i,
 void 		ft_succ(char *msg);
 void	exec_cmd(t_buffer *buffer, t_conn *conn, t_client *client, int fd);
 void	disconnect_client(int fd, t_client *client, t_conn *conn);
-void	join(t_conn *conn, char *str, int fd);
+void	join(t_conn *conn, char *str, int fd, t_buffer *buffer);
 t_client	*structdup(int fd, t_conn *conn, char *chan_name);
 t_client		*get_client(t_conn *conn, int fd);
 int			ft_structlen(t_client *client);
