@@ -46,7 +46,7 @@ char	*make_cmd(char *sender_name, char *msg)
 	return (cmd);
 }
 
-void	msg(t_client *client, char *cmd, int fd, t_conn *conn)
+int		msg(t_client *client, char *cmd, int fd, t_conn *conn)
 {
 	int i;
 	char **array;
@@ -74,7 +74,7 @@ void	msg(t_client *client, char *cmd, int fd, t_conn *conn)
 				{
 					ft_err("You can't send a message to yourself\n");
 					send_result(-1, fd);
-					return ;
+					return (-1);
 				}
 				send_cmd(receiver->fd, make_cmd(name, cmd));
 				send_result(1, fd);
@@ -85,4 +85,5 @@ void	msg(t_client *client, char *cmd, int fd, t_conn *conn)
 	if (i == 0)
 		send_result(-1, fd);
 	free_2d_array((void**)array);
+	return (1);
 }

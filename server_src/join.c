@@ -69,7 +69,7 @@ void	add_channel_to_client(t_client *cl, char *name)
 	cl->channels[i + 1] = NULL;
 }
 
-void	join(t_conn *conn, char *str, int fd, t_buffer *buffer)
+int		join(t_conn *conn, char *str, int fd, t_buffer *buffer)
 {
 	char **array;
 	t_client *cl;
@@ -79,7 +79,7 @@ void	join(t_conn *conn, char *str, int fd, t_buffer *buffer)
 	if (arraylen(array) == 1)
 	{
 		buffer->save = 1;
-		return ;
+		return (-1);
 	}
 	cl = get_client(conn, fd);
 	set = 0;
@@ -98,4 +98,5 @@ void	join(t_conn *conn, char *str, int fd, t_buffer *buffer)
 			create_channel(conn, cl->name, array[1], 1);
 	}
 	add_to_channel(conn, fd, array[1]);
+	return (1);
 }

@@ -57,7 +57,7 @@ void		disconnect_client(int fd, t_client *client, t_conn *conn)
 	conn->nb_clients--;
 }
 
-void	quit(t_conn *conn, int fd)
+int		quit(t_conn *conn, int fd)
 {
 	t_client *client;
 	t_channel *chan;
@@ -89,4 +89,5 @@ void	quit(t_conn *conn, int fd)
 		}
 	}
 	disconnect_client(fd, client, conn);
+	return (1);
 }

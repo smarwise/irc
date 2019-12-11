@@ -40,9 +40,9 @@ char				*ft_strtrim(char const *s)
 	n = ft_strlen(s);
 	n--;
 	index = 0;
-	while (s[n] == ' ' || s[n] == '\t' || s[n] == '\n' || s[n] == '\r')
+	while (s[n] == '\t' || s[n] == '\n' || s[n] == '\r')
 		n--;
-	while (s[i] == ' ' || s[i] == '\t' || s[i] == '\n' || s[n] == '\r')
+	while (s[i] == '\t' || s[i] == '\n' || s[n] == '\r')
 		i++;
 	if (s[i] == '\0')
 		return (ft_strnew(1));

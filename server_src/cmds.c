@@ -78,7 +78,7 @@ int   get_cmd(t_buffer *buffer, int fd, t_conn *conn, t_select *select)
         if ((numbytes = recv(fd, buf, 49, 0)) <= 0)
             return (check_err(fd, conn, numbytes, select));
         else
-            add_to_buffer(buffer, ft_strtrim(buf));
+            add_to_buffer(buffer, buf);
         read_cmd(buffer, &i);
         if (numbytes < 49)
             break ;
@@ -115,11 +115,18 @@ void    check_cmd_exec(t_buffer *buff, int fd, t_client *client, t_conn *conn)
             temp = buff->cmd;
             buff->incomplete = ft_strjoin(buff->incomplete, buff->cmd);
             buff->cmd = ft_strdup(buff->incomplete);
-            exec_cmd(buff, conn, client, fd);
-            free(buff->incomplete);
-            buff->incomplete = NULL;
+            if (exec_cmd(buff, conn, client, fd) == 1)
+            {
+                free(buff->incomplete);
+                buff->incomplete = NULL;
+            }
         }
         ft_putendl(buff->incomplete);
+    }
+    else
+    {
+        free(buff->incomplete);
+        buff->incomplete = NULL;
     }
     buff->save = 0;
 }

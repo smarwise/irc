@@ -33,7 +33,7 @@ char	*add_channel_name(char *cmd, char *chan_name)
 	return (tmp2);
 }
 
-void	msg_channel(t_client *client, char *str, int fd, t_conn *conn)
+int		msg_channel(t_client *client, char *str, int fd, t_conn *conn)
 {
 	int i;
 	t_client *sender;
@@ -60,4 +60,5 @@ void	msg_channel(t_client *client, char *str, int fd, t_conn *conn)
     }
 	if (i == 0)
 		send_result(-1, fd);
+	return (1);
 }

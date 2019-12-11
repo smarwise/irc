@@ -21,7 +21,7 @@ void	set(t_client *client, int fd, char *str)
 	ft_succ(" logged in\n");
 }
 
-void	login(t_client *client, char *cmd, int fd, t_conn *conn)
+int	login(t_client *client, char *cmd, int fd, t_conn *conn)
 {
 	int i;
 	char **array;
@@ -32,7 +32,7 @@ void	login(t_client *client, char *cmd, int fd, t_conn *conn)
 	if (arraylen(array) != 2)
 	{
 		ft_putendl("Usage error");
-		return ;
+		return (-1);
 	}
 	while (client)
 	{
@@ -49,4 +49,5 @@ void	login(t_client *client, char *cmd, int fd, t_conn *conn)
 	if (i == 0)
 		send_result(-1, fd);
 	free_2d_array((void**)array);
+	return (1);
 }

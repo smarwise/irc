@@ -88,7 +88,7 @@ void	remove_user(t_channel *chan, int fd, t_conn *conn)
 	chan->nb_users--;
 }
 
-void	leave(t_conn *conn, char *str, int fd)
+int		leave(t_conn *conn, char *str, int fd)
 {
 	char **array;
 	t_channel *chan;
@@ -113,4 +113,5 @@ void	leave(t_conn *conn, char *str, int fd)
 		ft_err("Channel does not exist");
 		send_result(0, fd);
 	}
+	return (1);
 }

@@ -28,7 +28,7 @@ char	*get_list(t_channel *channel)
 	return(tmp);
 }
 
-void	who(t_conn *conn, int fd, char *cmd)
+int		who(t_conn *conn, int fd, char *cmd)
 {
 	t_channel *channel;
 	t_client 	*client;
@@ -52,4 +52,5 @@ void	who(t_conn *conn, int fd, char *cmd)
 	}
 	send(fd, list, ft_strlen(list), 0);
 	free(list);
+	return (1);
  }
