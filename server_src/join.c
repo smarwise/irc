@@ -46,7 +46,6 @@ void		add_to_channel(t_conn *conn, int fd, char *chan_name)
     }
     conn->channel->nb_users++;
     send_result(1, fd);
-    ft_putendl("channel addition successful");
 }
 
 void	add_channel_to_client(t_client *cl, char *name)
@@ -69,6 +68,45 @@ void	add_channel_to_client(t_client *cl, char *name)
 	cl->channels[i + 1] = NULL;
 }
 
+int		check_in_channel(char **array, char *name)
+{
+	int i;
+
+	i = 0;
+	if (array)
+	{
+		while (array[i])
+		{
+			if (ft_strcmp(array[i], name) == 0)
+				return (1);
+			i++;
+		}
+	}
+	return (0);
+}
+
+int		check_inp(t_client *cl, char **array, t_buffer *buffer, int fd)
+{
+	if (arraylen(array) == 1)
+	{
+		buffer->save = 1;
+		send(fd, "Incorrect use\n", 15, 0);
+	}
+	else if (!cl->name)
+		send(fd, "You must be logged in to join a channel\n", 41, 0);
+	else if ((array[1][0]) != '#')
+		send(fd, "Invalid channel name\n", 22, 0);
+	else if (ft_strlen(array[1]) < 2)
+		send(fd, "Invalid channel name\n", 22, 0);
+	else if (ft_strlen(array[1]) > 16)
+		send(fd, "Channel name cannot be greater than 16\n", 40, 0);
+	else if (check_in_channel(cl->channels, array[1]))
+		send(fd, "You are already in this channel\n", 33, 0);
+	else
+		return (1);
+	return (-1);
+}
+
 int		join(t_conn *conn, char *str, int fd, t_buffer *buffer)
 {
 	char **array;
@@ -76,27 +114,29 @@ int		join(t_conn *conn, char *str, int fd, t_buffer *buffer)
 	int set;
 
 	array = ft_strsplit(str, ' ');
-	if (arraylen(array) == 1)
-	{
-		buffer->save = 1;
-		return (-1);
-	}
 	cl = get_client(conn, fd);
-	set = 0;
-	if (conn->chan_head == NULL)
-		create_channel(conn, cl->name, array[1], 0);
-	else
+	if (check_inp(cl, array, buffer, fd) > 0)
 	{
-		conn->channel = conn->chan_head;
-		while (conn->channel)
+		set = 0;
+		if (conn->chan_head == NULL)
+			create_channel(conn, cl->name, array[1], 0);
+		else
 		{
-			if (ft_strcmp(array[1], conn->channel->name) == 0)
-				set = 1;
-			conn->channel = conn->channel->next;
+			conn->channel = conn->chan_head;
+			while (conn->channel)
+			{
+				if (ft_strcmp(array[1], conn->channel->name) == 0)
+					set = 1;
+				conn->channel = conn->channel->next;
+			}
+			if (set == 0)
+				create_channel(conn, cl->name, array[1], 1);
 		}
-		if (set == 0)
-			create_channel(conn, cl->name, array[1], 1);
+		add_to_channel(conn, fd, array[1]);
+		ft_succ(ft_strjoin(cl->name, " joined channel"));
+		ft_succ(ft_strjoin(" ", array[1]));
+		ft_putchar('\n');
+		return (1);
 	}
-	add_to_channel(conn, fd, array[1]);
-	return (1);
+	return (-1);
 }

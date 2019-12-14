@@ -89,3 +89,4 @@ char	*make_cmd(char *sender_name, char *msg);
 void 	send_cmd(int fd, char *cmd);
 void    remove_channel_from_user(int fd, char *name, t_conn *conn);
 void	add_channel_to_client(t_client *cl, char *name);
+int		check_in_channel(char **array, char *name);

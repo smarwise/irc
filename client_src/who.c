@@ -52,8 +52,8 @@ void	who(t_user *user, t_conn *conn, char **array)
 		ft_err("You have to be in a channel to list participants");
 	else if (check_in_channel(user->channels, array[1]))
 		ft_err("You are not in this channel");
-	else if (arraylen(array) != 01)
-		ft_err("Incorrect use: /who");
+	else if (arraylen(array) != 1)
+		ft_err("Incorrect use: /who <channel name>");
 	else
 	{
 		while (user->channels[i] != NULL)

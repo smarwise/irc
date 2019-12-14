@@ -9,7 +9,6 @@ void	destroy_one(t_channel *chan, t_conn *conn)
 		free(chan);
 		chan = NULL;
 		conn->chan_head = NULL;
-		ft_putendl("channel destroyed");
 		return ;
 	}
 	tmp = chan->next;
@@ -52,7 +51,6 @@ void	remove_one(t_client *client, t_channel *chan, t_conn *conn)
 		client = NULL;
 		chan->nb_users = 0;
 		chan->head = NULL;
-		ft_putendl("no users left");
 		destroy_chan(chan, conn);
 		return ;
 	}
@@ -88,30 +86,58 @@ void	remove_user(t_channel *chan, int fd, t_conn *conn)
 	chan->nb_users--;
 }
 
+int		check_inp2(t_client *cl, char **array, int fd)
+{
+	if (arraylen(array) == 1)
+		send(fd, "Incorrect use\n", 15, 0);
+	else if (!cl->name)
+		send(fd, "You must be logged in to leave a channel\n", 41, 0);
+	else if ((array[1][0]) != '#')
+		send(fd, "Invalid channel name\n", 22, 0);
+	else if (ft_strlen(array[1]) < 2)
+		send(fd, "Invalid channel name\n", 22, 0);
+	else if (ft_strlen(array[1]) > 16)
+		send(fd, "Channel name cannot be greater than 16\n", 40, 0);
+	else if (check_in_channel(cl->channels, array[1]) == 0)
+		send(fd, "You are not in this channel\n", 29, 0);
+	else
+		return (1);
+	return (-1);
+}
+
 int		leave(t_conn *conn, char *str, int fd)
 {
 	char **array;
 	t_channel *chan;
 	int n;
+	t_client *cl;
 
 	array = ft_strsplit(str, ' ');
 	chan = conn->chan_head;
 	n = 0;
-	while (chan)
+	cl = get_client(conn, fd);
+	if (check_inp2(cl, array, fd) > 0)
 	{
-		if (ft_strcmp(chan->name, array[1]) == 0)
+		while (chan)
 		{
-			remove_user(chan, fd, conn);
-			remove_channel_from_user(fd, array[1], conn);
-			send_result(1, fd);
-			n = 1;
+			if (ft_strcmp(chan->name, array[1]) == 0)
+			{
+				remove_user(chan, fd, conn);
+				remove_channel_from_user(fd, array[1], conn);
+				send_result(1, fd);
+				n = 1;
+			}
+			chan = chan->next;
 		}
-		chan = chan->next;
+		if (n == 0)
+		{
+			ft_err("Channel does not exist");
+			send_result(0, fd);
+		}
+		ft_succ(ft_strjoin(cl->name, " left channel"));
+		ft_succ(ft_strjoin(" ", array[1]));
+		ft_putchar('\n');
+		return (1);
 	}
-	if (n == 0)
-	{
-		ft_err("Channel does not exist");
-		send_result(0, fd);
-	}
-	return (1);
+	return (-1);
 }

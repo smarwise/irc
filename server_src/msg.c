@@ -46,6 +46,25 @@ char	*make_cmd(char *sender_name, char *msg)
 	return (cmd);
 }
 
+int		check_msg(t_select *select, char **array, t_client *client, int fd)
+{
+	(void)select;
+	if (arraylen(array) < 3)
+        send(fd, "Too few arguments to command call\n", 35, 0);
+    else if (!client->name)
+        send(fd, "You must be logged in to send messages\n", 40, 0);
+    else if (ft_strlen(array[1]) > 9)
+		send(fd, "Nickname cannot be more than 9 characters\n", 43, 0);
+	else
+	{
+		FD_ZERO(&select->write_fds);
+		FD_ZERO(&select->read_fds);	
+		FD_SET(fd, &select->write_fds);
+		return (1);
+	}
+	return (-1);
+}
+
 int		msg(t_client *client, char *cmd, int fd, t_conn *conn)
 {
 	int i;
@@ -55,35 +74,35 @@ int		msg(t_client *client, char *cmd, int fd, t_conn *conn)
 	t_client *receiver;
 
 	array = ft_strsplit(cmd, ' ');
-	client = conn->head;
+	client = get_client(conn, fd);
 	i = 0;
-	(void)client;
 	select = (t_select*)malloc(sizeof(t_select));
-	FD_ZERO(&select->write_fds);
-	FD_ZERO(&select->read_fds);	
-	FD_SET(fd, &select->write_fds);
-    if ((receiver = check_if_there(conn->head, array[1])) != NULL)
+	if (check_msg(select, array, client, fd) > 0)
 	{
-		name = get_sender_name(conn->head, fd);
-		if (name != NULL)
+		if ((receiver = check_if_there(conn->head, array[1])) != NULL)
 		{
-			do_select(fd+1, &select->read_fds, &select->write_fds);
-			if (FD_ISSET(fd, &select->write_fds))
+			name = get_sender_name(conn->head, fd);
+			if (name != NULL)
 			{
-				if (receiver->fd == fd)
+				do_select(fd+1, &select->read_fds, &select->write_fds);
+				if (FD_ISSET(fd, &select->write_fds))
 				{
-					ft_err("You can't send a message to yourself\n");
-					send_result(-1, fd);
-					return (-1);
+					if (receiver->fd == fd)
+					{
+						ft_err("You can't send a message to yourself\n");
+						send_result(-1, fd);
+						return (-1);
+					}
+					send_cmd(receiver->fd, make_cmd(name, cmd));
+					send_result(1, fd);
+					i = 1;
 				}
-				send_cmd(receiver->fd, make_cmd(name, cmd));
-				send_result(1, fd);
-				i = 1;
 			}
 		}
-    }
-	if (i == 0)
-		send_result(-1, fd);
-	free_2d_array((void**)array);
-	return (1);
+		if (i == 0)
+			send_result(-1, fd);
+		free_2d_array((void**)array);
+		return (1);
+	}
+	return (-1);
 }
