@@ -90,7 +90,6 @@ int		check_inp(t_client *cl, char **array, t_buffer *buffer, int fd)
 	if (arraylen(array) == 1)
 	{
 		buffer->save = 1;
-		send_info("Incorrect use\n", fd);
 	}
 	else if (!cl->name)
 		send_info("You must be logged in to join a channel\n", fd);

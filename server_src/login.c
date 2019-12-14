@@ -30,7 +30,6 @@ int			login(t_client *client, char *cmd, int fd, t_conn *conn)
 	i = 0;
 	if (arraylen(array) != 2)
 	{
-		send_info("Incorrect use\n", fd);
 		return (-1);
 	}
 	if (ft_strlen(array[1]) > 9)
