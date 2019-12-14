@@ -30,8 +30,11 @@ void	list_users(char *chan_name, t_conn *conn)
 	char *str;
 	char *tmp;
 	char buf[1000];
+	char buf2[50];
+	int i;
+	int nb;
 
-
+	i = 0;
 	ft_memset(buf, '\0', 1000);
 	ft_putstr("Users in channel ");
 	ft_putstr(chan_name);
@@ -39,7 +42,13 @@ void	list_users(char *chan_name, t_conn *conn)
 	tmp = ft_strjoin("/who", " ");
 	str = ft_strjoin(tmp, chan_name);
 	send_cmd(str, conn);
-	recv(conn->fd, buf, 1000, 0);
+	while ((nb = recv_cmd(buf2, conn->fd)))
+	{
+		ft_strcpy(buf + i, buf2);
+		if (nb < 49)
+		 	break;
+		i += 49;
+	}
 	print_result(buf);
 }
 

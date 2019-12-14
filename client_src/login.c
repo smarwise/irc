@@ -1,10 +1,5 @@
 #include "../includes/client.h"
 
-void 	send_cmd(char *cmd, t_conn *conn)
-{
-	send(conn->fd, cmd, ft_strlen(cmd), 0);
-}
-
 void	set_vars(t_user *user, char *str)
 {
 	char **array;
@@ -18,21 +13,9 @@ void	set_vars(t_user *user, char *str)
 
 void 	check_feedback(t_conn *conn, t_user *user, char *str)
 {
-	char buf[10];
-	int nbytes;
+	char buf[50];
 
-	ft_memset(buf, '\0', 10);
-	if ((nbytes = (recv(conn->fd, buf, 9, 0))) <= 0)
-	{
-		if (nbytes == 0)
-		{
-			ft_err("Connection got cut unexpectedly");
-			exit(0);
-		}
-		else
-			ft_err("Result receival failed");
-	}
-	else
+	if (recv_cmd(buf, conn->fd) > 0)
 	{
 		if (ft_strcmp(buf, "success") == 0)
 			set_vars(user, str);

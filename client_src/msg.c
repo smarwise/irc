@@ -2,21 +2,9 @@
 
 void 	check(t_conn *conn)
 {
-	char buf[10];
-	int nbytes;
-
-	ft_memset(buf, '\0', 10);
-	if ((nbytes = (recv(conn->fd, buf, 9, 0))) <= 0)
-	{
-		if (nbytes == 0)
-		{
-			ft_err("Connection got cut unexpectedly");
-			exit(0);
-		}
-		else
-			ft_err("Result receival failed");
-	}
-	else
+	char buf[50];
+	
+	if (recv_cmd(buf, conn->fd))
 	{
 		if (ft_strcmp(buf, "success") == 0)
 			ft_succ("Message sent\n");

@@ -30,7 +30,15 @@ int			login(t_client *client, char *cmd, int fd, t_conn *conn)
 	client = conn->head;
 	i = 0;
 	if (arraylen(array) != 2)
+	{
+		send(fd, "Incorrect use\n", 15, 0);
 		return (-1);
+	}
+	if (ft_strlen(array[1]) > 9)
+	{
+		send(fd, "Username cannot be greater than 9 characters\n", 46, 0);
+		return (-1);
+	}
 	while (client)
 	{
 		if (client->fd == fd)

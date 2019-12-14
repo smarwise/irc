@@ -29,9 +29,7 @@ void    get_full_cmd(int len, t_buffer *buffer, int fd)
             ft_memset(buf, '\0', 50);
             buffer->cmd = realloc(buffer->cmd, len + 1);
             buffer->cmdlen = len + 1;
-            if (recv(fd, buf, 49, 0) <= 0)
-                ft_err("Receive error\n");
-            else
+            if (recv_cmd(buf, fd) > 0)
                 add_to_buffer(buffer, buf);
         }
         buffer->cmd[i] = buffer->buffer[buffer->read];
@@ -82,16 +80,10 @@ void    check_err(t_conn *conn, int nbytes)
 void    receive_msg(t_conn *conn, t_buffer *buffer)
 {
     char buf[50];
-    int nbytes;
 
-    ft_memset(buf, '\0', 50);
     while (1)
     {
-        if ((nbytes = (recv(conn->fd, buf, 49, 0))) <= 0)
-        {
-            check_err(conn, nbytes);
-        }
-        else
+        if (recv_cmd(buf, conn->fd) > 0)
         {
             add_to_buffer(buffer, buf);
             read_cmds(buffer, conn->fd);

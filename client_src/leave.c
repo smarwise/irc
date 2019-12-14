@@ -45,21 +45,9 @@ void	process_result(char buf[10], t_user *user, char *str)
 
 void 	leave_feedback(t_conn *conn, t_user *user, char *str)
 {
-	char buf[10];
-	int nbytes;
-
-	ft_memset(buf, '\0', 10);
-	if ((nbytes = (recv(conn->fd, buf, 9, 0))) <= 0)
-	{
-		if (nbytes == 0)
-		{
-			ft_err("Connection got cut unexpectedly\n");
-			exit(0);
-		}
-		else
-			ft_err("Result receival failed\n");
-	}
-	else
+	char buf[50];
+	
+	if (recv_cmd(buf, conn->fd) > 0)
 		process_result(buf, user, str);
 }
 

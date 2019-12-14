@@ -10,7 +10,7 @@ client_obj = client_obj/main.o client_obj/handlers.o\
 			client_obj/quit.o client_obj/msg.o\
 			client_obj/receive_msg.o client_obj/show_msg.o\
 			client_obj/leave.o client_obj/who.o\
-			client_obj/msg_channel.o\
+			client_obj/msg_channel.o client_obj/send_recv.o\
      
 server_obj = server_obj/main.o server_obj/handlers.o\
 			server_obj/connect.o server_obj/select.o\

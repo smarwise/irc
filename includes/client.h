@@ -59,3 +59,4 @@ void	show_msg(t_buffer *buffer);
 void    msg_channel(char *str, t_conn *conn, t_user *user);
 void 	check(t_conn *conn);
 int		check_in_channel(char **array, char *name);
+int     recv_cmd(char buf[50], int fd);
