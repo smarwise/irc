@@ -31,11 +31,11 @@ char	*get_list(t_channel *channel)
 int		check_who(t_client *client, char **array, int fd)
 {
 	if (client->channels == NULL)
-		send(fd, "You have to be in a channel to list participants\n", 50, 0);
+		send_info("You have to be in a channel to list participants\n", fd);
 	else if (check_in_channel(client->channels, array[1]) == 0)
-		send(fd, "You are not in this channel\n", 29, 0);
+		send_info("You are not in this channel\n", fd);
 	else if (arraylen(array) != 2)
-		send(fd, "Incorrect use: /who <channel name>\n", 36, 0);
+		send_info("Incorrect use: /who <channel name>\n", fd);
 	else
 		return (1);
 	return (-1);
@@ -65,7 +65,7 @@ int		who(t_conn *conn, int fd, char *cmd)
 			}
 			channel = channel->next;
 		}
-		send(fd, list, ft_strlen(list), 0);
+		send_info(list, fd);
 		free(list);
 		return (1);
 	}

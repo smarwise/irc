@@ -31,15 +31,17 @@ int		handle_error(int err)
 void	send_result(int n, int fd)
 {
 	if (n == -1)
-	{
-		if ((send(fd, "fail", 4, 0)) == -1)
-        	handle_error(6);
-	}
+		send_info("fail", fd);
+	// {
+	// 	if ((send(fd, "fail", 4, 0)) == -1)
+    //     	handle_error(6);
+	// }
 	else
-	{
-		if ((send(fd, "success", 7, 0)) == -1)
-        	handle_error(6);
-	}
+		send_info("success", fd);
+	// {
+	// 	if ((send(fd, "success", 7, 0)) == -1)
+    //     	handle_error(6);
+	// }
 }
 
 void 		ft_err(char *msg)

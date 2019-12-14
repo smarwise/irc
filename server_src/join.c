@@ -90,18 +90,18 @@ int		check_inp(t_client *cl, char **array, t_buffer *buffer, int fd)
 	if (arraylen(array) == 1)
 	{
 		buffer->save = 1;
-		send(fd, "Incorrect use\n", 15, 0);
+		send_info("Incorrect use\n", fd);
 	}
 	else if (!cl->name)
-		send(fd, "You must be logged in to join a channel\n", 41, 0);
+		send_info("You must be logged in to join a channel\n", fd);
 	else if ((array[1][0]) != '#')
-		send(fd, "Invalid channel name\n", 22, 0);
+		send_info("Invalid channel name\n", fd);
 	else if (ft_strlen(array[1]) < 2)
-		send(fd, "Invalid channel name\n", 22, 0);
+		send_info("Invalid channel name\n", fd);
 	else if (ft_strlen(array[1]) > 16)
-		send(fd, "Channel name cannot be greater than 16\n", 40, 0);
+		send_info("Channel name cannot be greater than 16\n", fd);
 	else if (check_in_channel(cl->channels, array[1]))
-		send(fd, "You are already in this channel\n", 33, 0);
+		send_info("You are already in this channel\n", fd);
 	else
 		return (1);
 	return (-1);

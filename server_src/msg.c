@@ -9,8 +9,9 @@ void 	send_cmd(int fd, char *cmd)
 	len = ft_strlen(cmd);
 	size = ft_itoa(len);
 	real_cmd = ft_strjoin(size, cmd);
-	if (send(fd, real_cmd, ft_strlen(real_cmd), 0) <= 0)
-		handle_error(6);
+	// if (send(fd, real_cmd, ft_strlen(real_cmd), 0) <= 0)
+	// 	handle_error(6);
+	send_info(real_cmd, fd);
 }
 
 t_client    *check_if_there(t_client *client, char *name)
@@ -50,11 +51,11 @@ int		check_msg(t_select *select, char **array, t_client *client, int fd)
 {
 	(void)select;
 	if (arraylen(array) < 3)
-        send(fd, "Too few arguments to command call\n", 35, 0);
+        send_info("Too few arguments to command call\n", fd);
     else if (!client->name)
-        send(fd, "You must be logged in to send messages\n", 40, 0);
+        send_info("You must be logged in to send messages\n", fd);
     else if (ft_strlen(array[1]) > 9)
-		send(fd, "Nickname cannot be more than 9 characters\n", 43, 0);
+		send_info("Nickname cannot be more than 9 characters\n", fd);
 	else
 	{
 		FD_ZERO(&select->write_fds);

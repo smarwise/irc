@@ -20,6 +20,7 @@ server_obj = server_obj/main.o server_obj/handlers.o\
 			server_obj/remove_channel.o server_obj/msg.o\
 			server_obj/send.o server_obj/who.o\
 			server_obj/quit.o server_obj/msg_channel.o\
+			server_obj/send_recv.o\
 
 all : $(server) $(client)
 

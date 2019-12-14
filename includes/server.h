@@ -59,6 +59,14 @@ typedef	struct 		s_conn
     t_channel 		*channel;
 }					t_conn;
 
+typedef struct		s_fd
+{
+	fd_set		master;
+	int 		fdmax;
+	fd_set		read_fds;
+	fd_set		write_fds;
+}					t_fd;
+
 char    *get_ip(struct sockaddr_in *sa);
 int		handle_error(int err);
 int   	init(char *str);
@@ -90,3 +98,4 @@ void 	send_cmd(int fd, char *cmd);
 void    remove_channel_from_user(int fd, char *name, t_conn *conn);
 void	add_channel_to_client(t_client *cl, char *name);
 int		check_in_channel(char **array, char *name);
+void 	send_info(char *cmd, int fd);

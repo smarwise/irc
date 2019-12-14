@@ -4,7 +4,6 @@ int		check_if_exists(t_client *client, char *name)
 {
 	while (client)
 	{
-		ft_putendl(client->name);
 		if (ft_strcmp(client->name, name) == 0)
 			return (1);
 		client = client->next;
@@ -31,12 +30,12 @@ int			login(t_client *client, char *cmd, int fd, t_conn *conn)
 	i = 0;
 	if (arraylen(array) != 2)
 	{
-		send(fd, "Incorrect use\n", 15, 0);
+		send_info("Incorrect use\n", fd);
 		return (-1);
 	}
 	if (ft_strlen(array[1]) > 9)
 	{
-		send(fd, "Username cannot be greater than 9 characters\n", 46, 0);
+		send_info("Username cannot be greater than 9 characters\n", fd);
 		return (-1);
 	}
 	while (client)

@@ -36,13 +36,13 @@ char	*add_channel_name(char *cmd, char *chan_name)
 int		check_msgchan(t_client *client, char **array, int fd)
 {
 	if (arraylen(array) < 3)
-        send(fd, "Input message to send\n", 23, 0);
+        send_info("Input message to send\n", fd);
     else if (client->logged_in == 0)
-        send(fd, "You have to be logged in to send messages\n", 43, 0);
+        send_info("You have to be logged in to send messages\n", fd);
     else if (client->channels == NULL)
-        send(fd, "You have to be in a channel to send channel messages\n", 54, 0);
+        send_info("You have to be in a channel to send channel messages\n", fd);
     else if (!check_in_channel(client->channels, array[1]))
-        send(fd, "You are not in this channel\n", 29, 0);
+        send_info("You are not in this channel\n", fd);
 	else
 		return (1);
 	return (-1);
