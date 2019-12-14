@@ -27,6 +27,8 @@ void  create_client_buffer(int fd, t_select *select, t_conn *conn)
 {
     t_buffer *buf;
 
+    if (conn->nb_clients < 0)
+        conn->nb_clients = 0;
     if (conn->nb_clients == 0)
     {
         buf = (t_buffer*)malloc(sizeof(t_buffer));

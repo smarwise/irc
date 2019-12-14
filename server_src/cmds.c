@@ -24,7 +24,7 @@ int    check_err(int fd, t_conn *conn, int nbytes, t_select *select)
     name = cl->name;
     if (nbytes == 0)
     {
-        quit(conn, fd);
+        quit(conn, fd, select);
         if (name == NULL)
             ft_err("Client disconnected\n");
         else

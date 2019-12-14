@@ -33,11 +33,38 @@ void		disconnect_first(t_client *client, t_conn *conn)
 	free(client);
 }
 
-void		disconnect_client(int fd, t_client *client, t_conn *conn)
+void		delete_buffer(t_select *select, int fd, t_conn *conn)
+{
+	t_buffer *temp;
+	t_buffer *prev;
+
+	temp = select->buffer;
+	if (temp != NULL && temp->fd == fd) 
+    {
+		if (conn->nb_clients == 1)
+			select->buffer = NULL;
+		else
+        	select->buffer = temp->next;
+		free(temp);
+		return; 
+    }
+    while (temp != NULL && temp->fd != fd) 
+    { 
+        prev = temp; 
+        temp = temp->next; 
+    }
+    if (temp == NULL)
+		return;
+	prev->next = temp->next; 
+    free(temp);
+}
+
+void		disconnect_client(int fd, t_client *client, t_conn *conn, t_select *select)
 {
 	t_client *tmp;
 
     client = conn->head;
+	delete_buffer(select,  fd, conn);
 	if (client->fd == fd || structlen(conn) == 1)
 		disconnect_first(client, conn);
 	else
@@ -57,7 +84,7 @@ void		disconnect_client(int fd, t_client *client, t_conn *conn)
 	conn->nb_clients--;
 }
 
-int		quit(t_conn *conn, int fd)
+int		quit(t_conn *conn, int fd, t_select *select)
 {
 	t_client *client;
 	t_channel *chan;
@@ -88,6 +115,6 @@ int		quit(t_conn *conn, int fd)
 			i++;
 		}
 	}
-	disconnect_client(fd, client, conn);
+	disconnect_client(fd, client, conn, select);
 	return (1);
 }

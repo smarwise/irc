@@ -69,7 +69,7 @@ void    handle_old_clients(t_select *select, int *i,
 		t_conn *conn);
 void 		ft_succ(char *msg);
 int		exec_cmd(t_buffer *buffer, t_conn *conn, t_client *client, int fd);
-void	disconnect_client(int fd, t_client *client, t_conn *conn);
+void		disconnect_client(int fd, t_client *client, t_conn *conn, t_select *select);
 int		join(t_conn *conn, char *str, int fd, t_buffer *buffer);
 t_client	*structdup(int fd, t_conn *conn, char *chan_name);
 t_client		*get_client(t_conn *conn, int fd);
@@ -80,7 +80,7 @@ int		login(t_client *client, char *cmd, int fd, t_conn *conn);
 t_client    *structend(t_client *client, t_conn *conn);
 void	update_client_info(int fd, t_conn *conn, char *name);
 void	remove_user(t_channel *chan, int fd, t_conn *conn);
-int		quit(t_conn *conn, int fd);
+int		quit(t_conn *conn, int fd, t_select *select);
 int		msg(t_client *client, char *cmd, int fd, t_conn *conn);
 int		msg_channel(t_client *client, char *cmd, int fd, t_conn *conn);
 void    send_to_all(t_client *sender, t_channel *chan, char *msg);

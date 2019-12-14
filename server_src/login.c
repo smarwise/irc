@@ -21,9 +21,9 @@ void	set(t_client *client, int fd, char *str)
 	ft_succ(" logged in\n");
 }
 
-int	login(t_client *client, char *cmd, int fd, t_conn *conn)
+int			login(t_client *client, char *cmd, int fd, t_conn *conn)
 {
-	int i;
+	int		i;
 	char **array;
 
 	array = ft_strsplit(cmd, ' ');
