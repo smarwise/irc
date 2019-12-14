@@ -30,10 +30,7 @@ int	login(t_client *client, char *cmd, int fd, t_conn *conn)
 	client = conn->head;
 	i = 0;
 	if (arraylen(array) != 2)
-	{
-		ft_putendl("Usage error");
 		return (-1);
-	}
 	while (client)
 	{
 		if (client->fd == fd)

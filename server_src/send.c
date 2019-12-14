@@ -8,7 +8,6 @@ void    load_fds(t_client *clients, int fd, t_select *select, int *fdmax)
     {
         if (fd != clients->fd)
         {
-            ft_putnbr(clients->fd);
             FD_SET(clients->fd, &select->write_fds);
             if (clients->fd > *fdmax)
                 *fdmax = clients->fd;
@@ -36,8 +35,11 @@ void    send_to_all(t_client *sender, t_channel *chan, char *msg)
         }
         else
         {
-            ft_err("Failed to send to client ");
-            ft_putstr(clients->name);
+            if (clients->fd != sender->fd)
+            {
+                ft_err("Failed to send to client ");
+                ft_putstr(clients->name);
+            }
         }
         clients = clients->next;
     }

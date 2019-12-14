@@ -27,7 +27,7 @@ void    get_full_cmd(int len, t_buffer *buffer, int fd)
         if ((i == buffer->cmdlen - 1)  || (i % 48 == 0 && i != 0))
         {
             ft_memset(buf, '\0', 50);
-            buffer->cmd = realloc(buffer, len + 1);
+            buffer->cmd = realloc(buffer->cmd, len + 1);
             buffer->cmdlen = len + 1;
             if (recv(fd, buf, 49, 0) <= 0)
                 ft_err("Receive error\n");

@@ -105,13 +105,9 @@ void    check_cmd_exec(t_buffer *buff, int fd, t_client *client, t_conn *conn)
     if (buff->save == 1)
     {
         if (buff->incomplete == NULL)
-        {
-            ft_putendl("here1");
             buff->incomplete = ft_strdup(buff->cmd);
-        }
         else
         {
-            ft_putendl("here2");
             temp = buff->cmd;
             buff->incomplete = ft_strjoin(buff->incomplete, buff->cmd);
             buff->cmd = ft_strdup(buff->incomplete);
@@ -121,7 +117,6 @@ void    check_cmd_exec(t_buffer *buff, int fd, t_client *client, t_conn *conn)
                 buff->incomplete = NULL;
             }
         }
-        ft_putendl(buff->incomplete);
     }
     else
     {
